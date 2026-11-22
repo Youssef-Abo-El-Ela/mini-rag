@@ -38,7 +38,7 @@ class ProcessController(BaseController):
         if loader:
             return loader.load()
         return None
-        
+
     def process_file_content(
         self,
         file_content: list,

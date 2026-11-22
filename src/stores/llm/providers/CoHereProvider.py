@@ -50,13 +50,13 @@ class CoHereProvider(LLMInterface):
             self.logger.error("Generation model for CoHere was not set.")
             return None
         max_output_tokens = (
-                    max_output_tokens
-                    if max_output_tokens
-                    else self.default_generation_max_output_tokens
-                )
+            max_output_tokens
+            if max_output_tokens
+            else self.default_generation_max_output_tokens
+        )
         temperature = (
-                    temperature if temperature else self.default_generation_temperature
-                )
+            temperature if temperature else self.default_generation_temperature
+        )
         response = self.client.chat(
             model=self.generation_model_id,
             chat_history=chat_history,
@@ -83,20 +83,20 @@ class CoHereProvider(LLMInterface):
         input_type = CoHereEnums.DOCUMENT
         if document_type == DocumentTypeEnums.QUERY.value:
             input_type = CoHereEnums.QUERY
-            
+
         response = self.client.embed(
-            model = self.embedding_model_id,
-            texts = [self.process_text(text)],
-            input_type = input_type.value,
-            embedding_types = ['float']
+            model=self.embedding_model_id,
+            texts=[self.process_text(text)],
+            input_type=input_type.value,
+            embedding_types=["float"],
         )
 
         if not response or not response.embeddings or not response.embeddings.float:
             self.logger.error("Error while embedding text with CoHere.")
             return None
-        
+
         return response.embeddings.float[0]
-        
+
     def construct_prompt(self, prompt: str, role: str):
         return {
             "role": role,
