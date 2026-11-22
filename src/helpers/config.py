@@ -3,8 +3,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     APP_NAME: str
     APP_VERSION: str
-    OPENAI_API_KEY: str
-    
+        
     FILE_ALLOWED_TYPES: list
     FILE_MAX_SIZE: int  # in MB
     FILE_DEFAULT_CHUNK_SIZE: int  # in bytes
@@ -24,8 +23,8 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL_SIZE: int = None
     
     INPUT_DEFAULT_MAX_CHARACTERS: int = None
-    GENERATION_DEFAULT_MAX_OUTPUT_TOKENS: int = None
-    GENERATION_DEFAULT_TEMPERATURE: float = None
+    DEFAULT_GENERATION_MAX_OUTPUT_TOKENS: int = None
+    DEFAULT_GENERATION_TEMPERATURE: float = None
     class Config:
         env_file = ".env"
         
