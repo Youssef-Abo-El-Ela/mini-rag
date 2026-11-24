@@ -63,5 +63,5 @@ class VectorDBInterface(ABC):
         collection_name: str,
         vector: list,
         limit: int
-    ):
+    )-> List[Ret]:
         pass
