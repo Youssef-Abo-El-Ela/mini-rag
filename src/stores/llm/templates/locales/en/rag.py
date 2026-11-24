@@ -1,6 +1,7 @@
 from string import Template
 
-### RAG PROMPTS ###
+#### RAG PROMPTS ####
+
 #### System ####
 
 system_prompt = Template(
@@ -18,7 +19,7 @@ system_prompt = Template(
     )
 )
 
-### Document ###
+#### Document ####
 document_prompt = Template(
     "\n".join(
         [
@@ -33,6 +34,9 @@ footer_prompt = Template(
     "\n".join(
         [
             "Based only on the above documents, please generate an answer for the user.",
+            "## Question:",
+            "$query",
+            "",
             "## Answer:",
         ]
     )
