@@ -2,6 +2,7 @@ from .BaseController import BaseController
 from models.db_schemas import Project, DataChunk
 from stores.llm.LLMEnums import DocumentTypeEnums
 from typing import List
+import json
 
 
 class NLPController(BaseController):
@@ -24,10 +25,14 @@ class NLPController(BaseController):
             collection_name=collection_name
         )
 
-        return collection_info
+        return json.loads(json.dumps(collection_info, default=lambda x: x.__dict__))
 
     def index_into_vector_db(
-        self, project: Project, chunks: List[DataChunk], do_reset: bool = False
+        self,
+        project: Project,
+        chunks: List[DataChunk],
+        chunks_ids: List[int],
+        do_reset: bool = False,
     ):
         # step 1: get collection name
         collection_name = self.create_collection_name(project_id=project.project_id)
@@ -46,7 +51,7 @@ class NLPController(BaseController):
         _ = self.vectordb_client.create_collection(
             collection_name=collection_name,
             do_reset=do_reset,
-            embedding_size=self.embedding_client.embedding_size(),
+            embedding_size=self.embedding_client.embedding_size,
         )
 
         # step 4: insert into vector db
@@ -56,6 +61,25 @@ class NLPController(BaseController):
             vectors=vectors,
             metadata=metadata,
             texts=texts,
+            record_ids=chunks_ids,
         )
 
         return True
+
+    def search_vector_db_collection(self, project: Project, text: str, limit: int = 5):
+        collection_name = self.create_collection_name(project_id=project.project_id)
+
+        vector = self.embedding_client.embed_text(
+            text=text, document_type=DocumentTypeEnums.QUERY.value
+        )
+
+        if not vector or len(vector) == 0:
+            return False
+
+        results = self.vectordb_client.search_by_vector(
+            collection_name=collection_name, vector=vector, limit=limit
+        )
+        if not results:
+            return False
+
+        return json.loads(json.dumps(results, default=lambda x: x.__dict__))
