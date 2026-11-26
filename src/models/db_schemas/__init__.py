@@ -4,4 +4,4 @@
 # from .asset import Asset
 
 # SQLALCHEMY
-from minirag.schemas import Project, DataChunk, RetrievedDocument, Asset
+from models.db_schemas.minirag.schemas import Project, DataChunk, RetrievedDocument, Asset
